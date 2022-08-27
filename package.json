@@ -1,0 +1,44 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write '**/*.{js,jsx,ts,tsx}'",
+    "fix": "eslint --fix '**/*.{js,jsx,ts,tsx}'"
+  },
+  "dependencies": {
+    "@nextui-org/react": "^1.0.0-beta.9",
+    "@types/mapbox-gl": "^1.13.4",
+    "classnames": "^2.3.1",
+    "ioredis": "^5.2.3",
+    "mapbox-gl": "^2.9.2",
+    "next": "12.2.5",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.4.0",
+    "react-map-gl": "^7.0.18",
+    "redis": "^4.3.0",
+    "redis-om": "^0.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "18.7.3",
+    "@types/react": "18.0.17",
+    "@types/react-dom": "18.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.33.0",
+    "autoprefixer": "^10.4.8",
+    "eslint": "8.22.0",
+    "eslint-config-next": "12.2.5",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-tailwindcss": "^3.6.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "postcss": "^8.4.16",
+    "prettier": "^2.7.1",
+    "tailwindcss": "^3.1.8",
+    "typescript": "4.7.4"
+  }
+}
