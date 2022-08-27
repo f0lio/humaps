@@ -14,7 +14,7 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
     // console.log("users", users);
     res.status(200).json({ res: users });
   } catch (error) {
-    // console.log(error);
+    console.log(error); ///eslint-disable-line no-console
     res.status(500).json(error);
   }
 };

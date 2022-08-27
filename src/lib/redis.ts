@@ -13,7 +13,12 @@
 import { Client } from "redis-om";
 
 const redis = new Client();
-// redis.close();
+
+async function redisDisconnect() {
+  if (redis.isOpen()) {
+    await redis.close();
+  }
+}
 
 async function redisConnect() {
   if (!redis.isOpen()) {
@@ -21,4 +26,8 @@ async function redisConnect() {
   }
 }
 
-export { redis as db, redisConnect as dbConnect };
+export {
+  redis as db,
+  redisConnect as dbConnect,
+  redisDisconnect as dbDisconnect,
+};

@@ -43,15 +43,18 @@ export const searchUser = async (query: string) => {
     .equals(query)
     .or("username")
     .equals(query)
+    .or("bio")
+    .matches(query)
     .returnAll();
   // console.log('searchUser():', users);
   return users || [];
 };
 
 export const createUser = async (user: User) => {
+  // console.count("createUser()");
   const repo = await getUserRepo();
-
+  // console.log({ repo });
   const newUser = await repo.createAndSave(user);
-
+  // console.log({ newUser });
   return newUser;
 };
