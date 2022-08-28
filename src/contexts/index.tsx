@@ -5,19 +5,31 @@ import { Point, User } from "interface";
 interface SearchPayload {
   query?: string;
   geoQuery?: Point;
+  offset?: number;
+  count?: number;
 }
+
 interface ISearchContext {
   query: string;
   geoQuery?: Point;
   results: User[];
+  selectedUser: User;
+  showSingleCard: boolean;
   onTyping: (_: string) => void;
   onSubmit: () => void;
+  setQuery: (_: string) => void;
+  selectUser: (_: User) => void;
 }
+
 const SearchContext = createContext<ISearchContext>({
   query: "",
   results: [],
+  selectedUser: {},
+  showSingleCard: false,
   onTyping: (_: string) => {},
   onSubmit: () => {},
+  setQuery: (_: string) => {},
+  selectUser: (_: User) => {},
 });
 
 const useSearch = () => {
@@ -29,7 +41,7 @@ const useSearch = () => {
 };
 
 //: Promise<User[]>
-async function search(payload: SearchPayload) {
+export async function search(payload: SearchPayload) {
   try {
     const resp = await fetch("/api/search", {
       method: "POST",
@@ -42,6 +54,7 @@ async function search(payload: SearchPayload) {
       body: JSON.stringify(payload),
     });
     const data = resp.json();
+    // console.log('HERE', data);
     return data;
   } catch (error) {
     console.log(error); //eslint-disable-line no-console
@@ -53,6 +66,9 @@ const SearchProvider = (props) => {
   const [query, setQuery] = useState("");
   const [geoQuery, setGeoQuery] = useState<Point>({});
   const [results, setResults] = useState<User[]>([]);
+  const [selectedUser, setSelectedUser] = useState<User>({});
+  const [showSingleCard, setShowSingleCard] = useState(false);
+
   const [suggestions, setSuggestions] = useState<User[]>([]);
 
   const onTyping = (query: string) => {
@@ -60,8 +76,9 @@ const SearchProvider = (props) => {
     async function fetchData() {
       const data = search({
         query,
+        count: 5,
       });
-      // console.log(data)
+      // console.log(data);
       setSuggestions(data?.users || []);
     }
     fetchData();
@@ -80,6 +97,11 @@ const SearchProvider = (props) => {
     fetchData();
   };
 
+  const selectUser = (user: User) => {
+    setSelectedUser(user);
+    setShowSingleCard(true);
+  }
+
   return (
     <SearchContext.Provider
       value={{
@@ -87,7 +109,11 @@ const SearchProvider = (props) => {
         geoQuery: geoQuery,
         onTyping: onTyping,
         onSubmit: onSubmit,
+        setQuery: setQuery,
         results: results,
+        selectedUser: selectedUser,
+        selectUser: selectUser,
+        showSingleCard: showSingleCard,
       }}
     >
       {props.children}

@@ -1,23 +1,33 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 
+import UserCard from "@components/user";
 import { useSearch } from "@contexts/index";
 import { User } from "interface";
 
-const UserCard = ({ user }: { user: User }) => (
+const UserMiniCard = ({ user }: { user: User }) => (
   <div className="flex h-14 w-full cursor-pointer items-center gap-x-4 border-b border-blue-100 p-2">
-    <img src={user.avatar} className="h-full rounded-full" />
-    <p>{user.first_name}</p>
+    <img
+      className="h-full rounded-full"
+      src={user.avatar}
+      alt={user.full_name + " avatar"}
+    />
+    <p>{user.full_name}</p>
   </div>
 );
 
 const SearchList = () => {
-  const searchContext = useSearch();
-  // console.log(searchContext)
+  const ctx = useSearch();
+  // console.log(ctx)
   return (
     <section className="h-full w-full overflow-scroll pt-4 scrollbar-hide">
-      {searchContext?.results?.map((user, index) => (
-        <UserCard key={index} user={user} />
-      ))}
+      {ctx.selectedUser && ctx.showSingleCard ? (
+        <UserCard user={ctx.selectedUser} />
+      ) : (
+        ctx?.results?.map((user, index) => (
+          <UserMiniCard key={index} user={user} />
+        ))
+      )}
     </section>
   );
 };

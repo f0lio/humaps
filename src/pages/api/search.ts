@@ -12,17 +12,18 @@ const search = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(401).send({ message: "empty query" });
     return;
   }
-
   await dbConnect();
+  const offset = req.body.offset || 0;
+  const count = req.body.count || 30;
   try {
     let users = [];
     if (req.body.geoQuery)
       users = await searchUserByGeo(req.body.geoQuery, req.body.query);
-    else users = await searchUser(req.body.query);
+    else users = await searchUser(req.body.query, offset, count);
     // console.log("users", users);
-    res.status(200).json({ users: users });
+    res.status(200).json({ users: users, events: [] });
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     res.status(500).json(error);
   }
 

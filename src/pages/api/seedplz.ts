@@ -20,7 +20,7 @@ const seedplz = async (req: NextApiRequest, res: NextApiResponse) => {
     const limit = Number(count);
     const requests = [];
     for (let i = 0; i < limit; i++) {
-      const user = generateUser(i);
+      const user = generateUser();
       const newUser = await createUser(user);
       requests.push(newUser);
     }
@@ -38,13 +38,11 @@ const seedplz = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const generateUser = (index: number): User => {
+const generateUser = (): User => {
   return {
-    first_name: faker.name.firstName(),
-    last_name: faker.name.lastName(),
-    middle_name: faker.name.middleName(),
+    full_name: faker.name.fullName(),
     username: faker.internet.userName(),
-    bio: `[${index}] ${faker.name.jobTitle()}`,
+    bio: faker.name.jobTitle(),
     address: faker.address.streetAddress(true),
     /*
      ** [/redis-om/dist/index.js:1301:15] throw error when
@@ -55,7 +53,7 @@ const generateUser = (index: number): User => {
       longitude: Number(faker.address.longitude(180, -180, 4)),
     },
     avatar: faker.internet.avatar(), //https://cloudflare-ipfs.com
-    dob: new Date(faker.date.birthdate({ min: 13, max: 144, mode: "age" })),
+    dob: faker.date.birthdate({ min: 13, max: 144, mode: "age" }),
   };
 };
 

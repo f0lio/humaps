@@ -23,7 +23,9 @@
     "react-map-gl": "^7.0.18",
     "redis": "^4.3.0",
     "redis-om": "^0.3.6",
-    "tailwind-scrollbar-hide": "^1.1.7"
+    "tailwind-scrollbar-hide": "^1.1.7",
+    "turnstone": "^2.2.0",
+    "turnstone-recent-searches": "^0.5.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.4.0",

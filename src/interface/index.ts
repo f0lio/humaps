@@ -1,7 +1,5 @@
 export interface User {
-  first_name: string;
-  middle_name: string;
-  last_name: string;
+  full_name: string;
   username: string;
   bio: string;
   address: string;
