@@ -1,6 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 import { useMemo } from "react";
 
+import Image from "next/image";
 import { default as MapGL, Marker, NavigationControl } from "react-map-gl";
 
 import { useSearch } from "@contexts/index";
@@ -8,7 +8,6 @@ import { User } from "@interfaces/index";
 import { getCoordFromAddress, isLocationValid } from "@lib/utils";
 
 import "mapbox-gl/dist/mapbox-gl.css";
-import Image from "next/image";
 
 const formatLocation = (user: User) => {
   if (isLocationValid(user.location)) return user.location;
@@ -47,9 +46,9 @@ const Map = () => {
           </Marker>
         );
       }),
-    [ctx.results]
+    [ctx]
   );
-  console.count("MAP");
+  // console.count("MAP");
   return (
     <MapGL
       initialViewState={{

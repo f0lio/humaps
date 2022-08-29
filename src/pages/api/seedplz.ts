@@ -25,6 +25,7 @@ const seedplz = async (req: NextApiRequest, res: NextApiResponse) => {
       requests.push(newUser);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const promises = await Promise.all(requests);
     // console.log({ promises });
     // console.log(requests.length);

@@ -12,7 +12,7 @@ const ping = async (req: NextApiRequest, res: NextApiResponse) => {
     const ping = await db.execute(["PING"]);
     res.status(200).json({ message: ping });
   } catch (error) {
-    console.log(error); ///eslint-disable-line no-console
+    console.log(error); // eslint-disable-line no-console
     res.status(500).json(error);
   }
 };

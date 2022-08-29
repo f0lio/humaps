@@ -27,7 +27,7 @@ interface ISearchContext {
 const SearchContext = createContext<ISearchContext>({
   query: "",
   results: [],
-  //# @ts-ignore
+  // @ts-ignore
   selectedUser: {},
   showSingleCard: false,
   showPictureModal: false,
@@ -71,12 +71,14 @@ export async function search(payload: SearchPayload) {
 
 const SearchProvider = (props) => {
   const [query, setQuery] = useState("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [geoQuery, setGeoQuery] = useState<Point>({});
   const [results, setResults] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User>({});
   const [showSingleCard, setShowSingleCard] = useState(false);
   const [showPictureModal, setShowPictureModal] = useState(false);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [suggestions, setSuggestions] = useState<User[]>([]);
 
   const onTyping = (query: string) => {
