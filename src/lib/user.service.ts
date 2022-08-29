@@ -1,6 +1,6 @@
 import { Entity, Schema } from "redis-om";
 
-import { Point } from "interface";
+import { Point } from "@interfaces/index";
 
 import { db, dbConnect } from "./redis";
 
@@ -9,6 +9,11 @@ interface User {
   full_name: string;
   username: string;
   bio: string;
+  github: string;
+  linkedin: string;
+  twitter: string;
+  phone: string;
+  website: string;
   address: string;
   location: string;
   avatar: string;
@@ -22,6 +27,11 @@ const schema = new Schema(User, {
   username: { type: "string" },
   bio: { type: "text" },
   address: { type: "text" },
+  github: { type: "string" },
+  linkedin: { type: "string" },
+  twitter: { type: "string" },
+  phone: { type: "string" },
+  website: { type: "string" },
   location: { type: "point" },
   avatar: { type: "string" },
   dob: { type: "date" },
@@ -34,7 +44,7 @@ const getUserRepo = async () => {
   return repo;
 };
 
-export const searchUserByGeo = async (geoQuery: Point, query: string = "") => {
+export const searchUserByGeo = async (geoQuery: Point, _query: string = "") => {
   // console.log("searchUserByGeo()", geoQuery, query);
   return [];
 };

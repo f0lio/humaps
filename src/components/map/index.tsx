@@ -1,17 +1,14 @@
-import {
-  default as MapGL,
-  Marker,
-  NavigationControl,
-  Popup,
-} from "react-map-gl";
+/* eslint-disable @next/next/no-img-element */
+import { useMemo } from "react";
+
+import { default as MapGL, Marker, NavigationControl } from "react-map-gl";
+
+import { useSearch } from "@contexts/index";
+import { User } from "@interfaces/index";
+import { getCoordFromAddress, isLocationValid } from "@lib/utils";
 
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useSearch } from "@contexts/index";
-
-import { useMemo, useState } from "react";
-
-import { getCoordFromAddress, isLocationValid } from "@lib/utils";
-import { User } from "interface";
+import Image from "next/image";
 
 const formatLocation = (user: User) => {
   if (isLocationValid(user.location)) return user.location;
@@ -19,30 +16,24 @@ const formatLocation = (user: User) => {
 };
 
 const UserPin = ({ user }: { user: User }) => (
-  <div className="h-9 w-9">
-    <img src={user.avatar} className="h-full w-full rounded-full" />
+  <div className=" cursor-pointer duration-200 hover:scale-125">
+    <Image
+      width={38}
+      height={38}
+      layout="fixed"
+      className="h-full w-full rounded-full"
+      src={user.avatar}
+      alt={user.full_name || ""}
+    />
   </div>
 );
 
 const Map = () => {
-  const searchContext = useSearch();
-
-  // const onHover = useCallback(event => {
-  //   const {
-  //     features,
-  //     point: {x, y}
-  //   } = event;
-  //   const hoveredFeature = features && features[0];
-
-  //   // prettier-ignore
-  //   setHoverInfo(hoveredFeature && {feature: hoveredFeature, x, y});
-  // }, []);
-
-  const [userInfo, setUserInfo] = useState<User>({});
+  const ctx = useSearch();
 
   const users = useMemo(
     () =>
-      searchContext.results?.map((user, index) => {
+      ctx.results?.map((user, index) => {
         const loc = formatLocation(user);
         return (
           <Marker
@@ -50,18 +41,13 @@ const Map = () => {
             longitude={loc.longitude}
             latitude={loc.latitude}
             anchor="bottom"
-            onClick={(e) => {
-              // If we let the click event propagates to the map, it will immediately close the popup
-              // with `closeOnClick: true`
-              e.originalEvent.stopPropagation();
-              setUserInfo({ ...user, location: loc });
-            }}
+            onClick={() => ctx.selectUser(user)}
           >
             <UserPin user={{ ...user, location: loc }} />
           </Marker>
         );
       }),
-    [searchContext.results]
+    [ctx.results]
   );
   console.count("MAP");
   return (
@@ -73,33 +59,9 @@ const Map = () => {
       }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={process.env.NEXT_MAPBOX_PUBLIC_TOKEN ?? ""}
-      // interactiveLayerIds={['data']}
-      // onMouseMove={onHover}
     >
       <NavigationControl position="top-right" />
-
-      {/* <Source type="geojson" data={data}>
-        <Layer {...dataLayer} />
-      </Source> */}
-
       {users}
-
-      {userInfo && (
-        <Popup
-          anchor="top"
-          // longitude={Number(userInfo.location?.longitude)}
-          // latitude={Number(userInfo.location?.latitude)}
-          longitude={30}
-          latitude={30}
-          onClose={() => setUserInfo({})}
-          // className="popup-custom"
-        >
-          <img src={userInfo.avatar} className="h-full rounded-full" />
-          <div className="border border-red-600 bg-green-400 p-3">
-            {userInfo.first_name} {userInfo.last_name}
-          </div>
-        </Popup>
-      )}
     </MapGL>
   );
 };

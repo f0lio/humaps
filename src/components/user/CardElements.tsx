@@ -1,51 +1,35 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 
-import {
-  Octocat as defaultAvatar,
-  TwitterIcon,
-  WebsiteIcon,
-} from "@assets/index";
+import Image from "next/image";
 
-const GITHUB_URL = "https://github.com";
+import { Octocat, TwitterIcon, WebsiteIcon } from "@assets/index";
+import { useSearch } from "@contexts/index";
+import { removeLastSlash } from "@lib/utils";
 
 export const UserName = ({ username }: { username: string }) => (
-  <a className="flex gap-x-1" href={`${GITHUB_URL}/${username}`} target="blank">
+  <div className="flex cursor-default gap-x-1">
+    {/* <a className="flex gap-x-1" href={`${GITHUB_URL}/${username}`} target="blank"> */}
     {/* <img src={LinkIcon} className="w-4" /> */}
-    <p className="border-b border-orange-400/0 text-sm font-light text-gray-400 hover:border-orange-400/100">
+    <p className="border-b border-orange-400/0 text-sm font-light text-gray-400">
       @{username}
     </p>
-  </a>
+  </div>
 );
 
-export const Location = ({ location }: { location: string }) => {
+export const Address = ({
+  address,
+  onClick,
+}: {
+  address: string;
+  onClick: () => void;
+}) => {
   return (
-    <a className="flex gap-x-1">
+    <div className="flex gap-x-1" onClick={onClick}>
       {/* <img src={PinIcon} className="w-4" /> */}
-      <p className="text-sm font-light text-gray-400">{location}</p>
-    </a>
-  );
-};
-
-export const CardLinks = ({ links }: { links: any }) => {
-  if (!links) return null;
-  return (
-    <ul>
-      {links.website && (
-        <CardLink
-          link={links.website}
-          name={links.website}
-          icon={WebsiteIcon}
-        />
-      )}
-      {links.twitter && (
-        <CardLink
-          link={links.twitter}
-          name={"@" + new URL(links.twitter).pathname.substring(1)}
-          icon={TwitterIcon}
-        />
-      )}
-    </ul>
+      <p className="text-sm font-light text-gray-400">{address}</p>
+    </div>
   );
 };
 
@@ -58,43 +42,96 @@ export const CardLink = ({
   name: string;
   icon: any;
 }) => (
-  <li className="py-1">
-    <a href={link} className="flex gap-x-1" target="_blank" rel="noreferrer">
-      <img className="h-5 py-1" src={icon} alt={name + " icon"} />
-      <p className="border-b border-gray-200/0 text-sm text-gray-400 hover:border-gray-200/100">
+  <li>
+    <a
+      href={link}
+      className="flex items-center gap-x-2 "
+      target="_blank"
+      rel="noreferrer"
+    >
+      <Image width={16} height={16} src={icon} alt={name + " icon"} />
+      <p className="pt-1 text-sm text-gray-500/90 hover:text-gray-500/100">
         {name}
       </p>
     </a>
   </li>
 );
 
-export const StatsElement = ({ name, value, icon }) => (
-  <li className="flex gap-x-1">
-    {icon && <img src={icon} className="w-4" />}
-    <p className="w-16 font-thin">{name}</p>
-    <span>:</span>
-    <p className="text-right font-bold">{normalizeValue(value)}</p>
-  </li>
-);
+export const CardLinks = ({ links }: { links: any }) => {
+  if (!links) return null;
+  return (
+    <ul className="">
+      {links.website && (
+        <CardLink
+          link={links.website}
+          name={links.website}
+          icon={WebsiteIcon}
+        />
+      )}
+      {links.twitter && (
+        <CardLink
+          link={links.twitter}
+          name={removeLastSlash(new URL(links.twitter).pathname.substring(1))}
+          icon={TwitterIcon}
+        />
+      )}
+      {links.github && (
+        <CardLink
+          link={links.github}
+          name={removeLastSlash(new URL(links.github).pathname.substring(1))}
+          icon={Octocat}
+        />
+      )}
+      {/* {links.linkedin && (
+        <CardLink
+          link={links.linkedin}
+          name={removeLastSlash(new URL(links.linkedin).pathname.substring(1))}
+          icon={}
+        />
+      )} */}
+    </ul>
+  );
+};
 
-export const CardHeader = ({ name, avatar, username, location, stats }) => (
-  <div className="">
-    <div className="grid h-full w-full grid-cols-2 border-b">
-      <img className="h-full max-h-full p-1 " src={avatar || defaultAvatar} />
-      <div className="mb-1 flex-col border-l px-3 py-2">
-        <h1 className="break-words text-lg font-semibold">{name}</h1>
-        <UserName username={username} />
-        <Location location={location} />
+export const CardHeader = ({
+  full_name,
+  avatar,
+  username,
+  address,
+}: {
+  full_name: string;
+  avatar: string;
+  username: string;
+  address: string;
+}) => {
+  const ctx = useSearch();
+  return (
+    <div className="">
+      <div className="flex h-full w-full border-b">
+        <Image
+          width={160}
+          height={160}
+          layout="fixed"
+          className="max-h-full w-40 cursor-pointer rounded-lg duration-200 hover:scale-105"
+          src={avatar || "/empty-avatar.png"}
+          onClick={() => ctx.setShowPictureModal(true)}
+        />
+        <div className="mb-1 flex-col border-l px-3 py-2">
+          <h1 className="flex flex-col gap-y-1 break-words text-lg font-semibold">
+            {full_name}
+          </h1>
+          <UserName username={username} />
+          <Address address={address} onClick={() => {}} />
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
-export const CardDetails = ({ bio, links, stats }) => {
+export const CardDetails = ({ bio, links }: { bio: string; links: any }) => {
   return (
-    <div className="h-3/5 flex-col items-center justify-center break-words p-2">
-      <p className="text-sm ">{bio}</p>
-      {/* <CardStats stats={stats} /> */}
+    <div className="flex-col items-center justify-center break-words py-4">
+      <p className="text-lg">{bio}</p>
       <CardLinks links={links} />
     </div>
   );

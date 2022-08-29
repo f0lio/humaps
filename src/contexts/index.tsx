@@ -1,6 +1,6 @@
 import { useState, createContext, useContext } from "react";
 
-import { Point, User } from "interface";
+import { Point, User } from "@interfaces/index";
 
 interface SearchPayload {
   query?: string;
@@ -15,21 +15,28 @@ interface ISearchContext {
   results: User[];
   selectedUser: User;
   showSingleCard: boolean;
+  showPictureModal: boolean;
   onTyping: (_: string) => void;
-  onSubmit: () => void;
+  onSubmit: (_) => void;
   setQuery: (_: string) => void;
   selectUser: (_: User) => void;
+  unSelectUser: () => void;
+  setShowPictureModal: (_: boolean) => void;
 }
 
 const SearchContext = createContext<ISearchContext>({
   query: "",
   results: [],
+  //# @ts-ignore
   selectedUser: {},
   showSingleCard: false,
+  showPictureModal: false,
   onTyping: (_: string) => {},
-  onSubmit: () => {},
+  onSubmit: (_?: string) => {},
   setQuery: (_: string) => {},
   selectUser: (_: User) => {},
+  unSelectUser: () => {},
+  setShowPictureModal: (_: boolean) => {},
 });
 
 const useSearch = () => {
@@ -68,6 +75,7 @@ const SearchProvider = (props) => {
   const [results, setResults] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User>({});
   const [showSingleCard, setShowSingleCard] = useState(false);
+  const [showPictureModal, setShowPictureModal] = useState(false);
 
   const [suggestions, setSuggestions] = useState<User[]>([]);
 
@@ -84,11 +92,12 @@ const SearchProvider = (props) => {
     fetchData();
   };
 
-  const onSubmit = async () => {
-    if (query.length === 0) return;
+  const onSubmit = async (_query?: string) => {
+    const q = _query !== undefined && _query !== null ? _query : query;
+    if (q.length === 0) return;
     async function fetchData() {
       const data = await search({
-        query,
+        query: q,
       });
       // console.log(data);
       // console.count("onSubmit");
@@ -100,7 +109,11 @@ const SearchProvider = (props) => {
   const selectUser = (user: User) => {
     setSelectedUser(user);
     setShowSingleCard(true);
-  }
+  };
+  const unSelectUser = () => {
+    setShowSingleCard(false);
+    setSelectedUser({});
+  };
 
   return (
     <SearchContext.Provider
@@ -114,6 +127,9 @@ const SearchProvider = (props) => {
         selectedUser: selectedUser,
         selectUser: selectUser,
         showSingleCard: showSingleCard,
+        unSelectUser: unSelectUser,
+        showPictureModal,
+        setShowPictureModal,
       }}
     >
       {props.children}

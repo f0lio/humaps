@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+/* eslint-disable @next/next/no-img-element */
+import React, { useRef, useState } from "react";
 
 import classNames from "classnames";
 import { AiOutlineSearch } from "react-icons/ai";
-import Turnstone from "turnstone"; // ts-ignore
+// @ts-ignore
+import Turnstone from "turnstone";
+// @ts-ignore
+import recentSearchesPlugin from "turnstone-recent-searches";
 
+import { User } from "@interfaces/index";
 import { search, useSearch } from "contexts";
-import { User } from "interface";
 
 const MAX_SUGGESTIONS = 8;
 
@@ -20,24 +24,23 @@ const styles = {
   clearButton:
     "absolute inset-y-0 right-0 w-8 inline-flex items-center justify-center text-crystal-500 hover:text-hotpink-300",
   listbox:
-    "w-full bg-white sm:border sm:border-crystal-500 sm:rounded text-left sm:mt-2 p-2 sm:drop-shadow-xl",
+    "w-full bg-white border border-crystal-500 rounded text-left drop-shadow-xl",
   groupHeading:
     "cursor-default mt-2 mb-0.5 px-1.5 uppercase text-sm text-hotpink-300",
-  item: "cursor-pointer p-1.5 text-lg overflow-ellipsis overflow-hidden text-oldsilver-700",
+  item: "cursor-pointer overflow-ellipsis overflow-hidden text-oldsilver-700",
   highlightedItem:
-    "cursor-pointer p-1.5 text-lg overflow-ellipsis overflow-hidden text-oldsilver-700 rounded bg-crystal-100",
+    "cursor-pointer overflow-ellipsis overflow-hidden text-oldsilver-700 rounded bg-crystal-100",
   match: "font-semibold",
   noItems: "cursor-default text-center my-20",
 };
 
 const ListItem = ({ item }: { item: User }) => {
   return (
-    <div className="flex cursor-pointer items-center bg-white px-5 py-4 text-gray-900">
+    <div className="flex cursor-pointer items-center p-2 text-gray-900 hover:bg-gray-100">
       <img
         className="mr-3 rounded-full object-cover"
         width={35}
         height={35}
-        layout="fixed"
         src={item.avatar || "/empty-avatar.png"}
         alt={item.full_name}
       />
@@ -50,6 +53,8 @@ const Searchbar = () => {
   const [hasFocus, setHasFocus] = useState(false);
   const ctx = useSearch();
 
+  const turnstoneRef = useRef();
+
   const listbox = {
     displayField: "full_name",
     data: async (query: string) => {
@@ -59,24 +64,27 @@ const Searchbar = () => {
       });
       return data.users;
     },
-    // searchType: "startsWith",
-    searchType: "contains",
+    searchType: "startsWith",
+    // searchType: "contains",
   };
 
   const onBlur = () => setHasFocus(false);
   const onFocus = () => setHasFocus(true);
 
-  const onSelect = (item: User) => {
-    console.log(item);
-    ctx.selectUser(item);
-  };
+  // const onSelect = (item: User) => {
+  //   console.log(item);
+  //   // turnstoneRef.current?.blur();
+  //   turnstoneRef.current?.query(item?.full_name || "");
+  //   ctx.selectUser(item);
+  // };
 
   const onEnter = (query: string) => {
-    console.log({query});
-    ctx.setQuery(query);
-    
-    console.log("!!", ctx.query);
-    ctx.onSubmit();
+    ctx.onSubmit(query);
+    // @ts-ignore
+    turnstoneRef.current?.query(query);
+    // @ts-ignore
+    turnstoneRef.current?.blur();
+    ctx.unSelectUser();
   };
 
   return (
@@ -96,6 +104,7 @@ const Searchbar = () => {
         <AiOutlineSearch type="search" className="h-6 w-6" />
       </span>
       <Turnstone
+        ref={turnstoneRef}
         id="autocomplete"
         name="search"
         styles={styles}
@@ -113,9 +122,9 @@ const Searchbar = () => {
         Item={ListItem}
         onBlur={onBlur}
         onFocus={onFocus}
-        onSelect={onSelect}
+        // onSelect={onEnter}
         onEnter={onEnter}
-        // plugins={[recentSearchesPlugin]}
+        plugins={[recentSearchesPlugin]}
       />
     </div>
   );

@@ -16,7 +16,7 @@ const Home: NextPage = () => {
         <meta name="description" content="GitMaps" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex h-screen w-full">
+      <div className="flex h-screen w-full overflow-hidden">
         <Sidebar />
         <Map />
       </div>

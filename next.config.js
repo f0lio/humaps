@@ -7,7 +7,9 @@ const nextConfig = {
     NEXT_MAPBOX_PUBLIC_TOKEN: process.env.NEXT_MAPBOX_PUBLIC_TOKEN ?? "",
   },
 
-  images: ["cloudflare-ipfs.com"],
+  images: {
+    domains: ["cloudflare-ipfs.com"],
+  },
 };
 
 module.exports = nextConfig;

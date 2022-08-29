@@ -14,3 +14,9 @@ export const isLocationValid = (location: any) => {
     location.latitude !== null
   );
 };
+
+export const removeLastSlash = (str: string) => {
+  return str.charAt(str.length - 1) == "/"
+    ? str.substring(0, str.length - 1)
+    : str;
+};
