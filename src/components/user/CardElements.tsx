@@ -106,8 +106,8 @@ export const CardHeader = ({
 }) => {
   const ctx = useSearch();
   return (
-    <div className="">
-      <div className="flex h-full w-full border-b">
+    <div className="flex h-full w-full">
+      <div className="pr-1">
         <Image
           width={160}
           height={160}
@@ -116,13 +116,13 @@ export const CardHeader = ({
           src={avatar || "/empty-avatar.png"}
           onClick={() => ctx.setShowPictureModal(true)}
         />
-        <div className="mb-1 flex-col border-l px-3 py-2">
-          <h1 className="flex flex-col gap-y-1 break-words text-lg font-semibold">
-            {full_name}
-          </h1>
-          <UserName username={username} />
-          <Address address={address} onClick={() => {}} />
-        </div>
+      </div>
+      <div className="mb-1 flex-col border-l px-3 py-2">
+        <h1 className="flex flex-col gap-y-1 break-words text-lg font-semibold">
+          {full_name}
+        </h1>
+        <UserName username={username} />
+        <Address address={address} onClick={() => {}} />
       </div>
     </div>
   );
@@ -130,9 +130,13 @@ export const CardHeader = ({
 
 export const CardDetails = ({ bio, links }: { bio: string; links: any }) => {
   return (
-    <div className="flex-col items-center justify-center break-words py-4">
-      <p className="text-lg">{bio}</p>
-      <CardLinks links={links} />
+    <div className="flex-col items-center justify-center break-words py-1">
+      <div className="border-b py-2">
+        <p className="text-lg">{bio}</p>
+      </div>
+      <div className="py-2">
+        <CardLinks links={links} />
+      </div>
     </div>
   );
 };

@@ -12,8 +12,8 @@ const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>GitMaps</title>
-        <meta name="description" content="GitMaps" />
+        <title>HuMaps</title>
+        <meta name="description" content="HuMaps" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex h-screen w-full overflow-hidden">
