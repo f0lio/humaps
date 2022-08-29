@@ -7,7 +7,7 @@ import { createUser } from "@lib/user.service";
 
 const seedplz = async (req: NextApiRequest, res: NextApiResponse) => {
   const { pass, count } = req.query;
-  if (pass !== "plz") {
+  if (!process.env.POST_PASS || pass !== process.env.POST_PASS) {
     res.status(401).json({ message: "la" });
     return;
   } else if (count === undefined || Number(count) < 1 || Number(count) > 1e4) {

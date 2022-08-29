@@ -8,6 +8,11 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(405).send({ message: "Only POST requests allowed" });
     return;
   }
+  const { pass } = req.query;
+  if (!process.env.POST_PASS || pass !== process.env.POST_PASS) {
+    res.status(401).json({ message: "la" });
+    return;
+  }
   await dbConnect();
   try {
     const users = await createUser(req.body);
