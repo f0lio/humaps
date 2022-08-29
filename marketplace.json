@@ -1,0 +1,20 @@
+{
+  "app_name": "HuMaps", //Name of the app
+  "description": "Discover people through maps", // One line description
+  "hidden": false, // Can be "true" or "false". If true, this app won't show up in Launchpad.
+  "rank": 21, // This is used to sort the apps in the marketplace. 1 to 20 are reserved. Enter greater than 20
+  "type": "Full App", //Can be "Building Block" or "Full App"
+  "contributed_by": "Community", // Can be "Redis Labs" or "Community" or "Partner"
+  "repo_url": "https://github.com/f0lio/humaps", //This is the Gitub Repo's URL.
+  "download_url": "https://github.com/f0lio/humaps/archive/master.zip",
+  "hosted_url": "https://humaps.vercel.app/", //The URL of the app. if you are hosting this app somewhere
+  "language": ["TypeScript"], // Backend technologies: "JavaScript", "Java", "Python", "Go", "C#", "Ruby", "PHP", etc.
+  "redis_commands": ["JSON.SET", "XADD", "XRANGE"], // Enter all the Redis commands
+  "redis_features": [], // Enter any core Redis feature or leave it blank.
+  "redis_modules": ["RediJSON", "RediSearch"], //Value can be one or more of "RediJSON", "RediSearch", "RedisTimeseries", "RedisAI"  "RedisGears" or "RedisGraph" listed in an array.
+  "app_image_urls": ["", ""], // Provide any image urls in an array.
+  "youtube_url": "", //Provide a Youtube link to your app's video
+  "special_tags": ["Hackathon"], // "Hackathon", "Paid", or any event names.
+  "verticals": ["Social", "Tourism"], // Can be: "Healthcare", "Financial", "Tourism", "Retail", "Oil & Gas", "Manufacturing", "Technology","Education", "Construction"
+  "markdown": "https://raw.githubusercontent.com/f0lio/humaps/master/README.md" // Link to the RAW Markdown.
+}
